@@ -3,7 +3,6 @@ on:
   pull_request:
 
 env:
-  IMAGE_REPO: rancher
   GO_VERSION: "1.22.0"
 
 jobs:
@@ -35,6 +34,6 @@ jobs:
 
           CGO_ENABLED=0 go build -ldflags "$LINKFLAGS -extldflags -static -s" -o bin/csp-adapter
       
-      - name: Test Binary
+      - name: Run Tests
         run: |
           go test ./... -v
