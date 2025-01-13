@@ -23,14 +23,12 @@ jobs:
       
       - name: Build Binary
         run: |
-          VERSION=$(git describe --tags --always --dirty)
-          COMMIT=$(git rev-parse --short HEAD)
+          VERSION=$(git describe --tags --always)
           ARCH=$(go env GOHOSTARCH)
           SUFFIX="-${ARCH}"
 
           # Set linker flags
           LINKFLAGS="-X github.com/rancher/csp-adapter.Version=$VERSION"
-          LINKFLAGS="-X github.com/rancher/csp-adapter.GitCommit=$COMMIT"
 
           CGO_ENABLED=0 go build -ldflags "$LINKFLAGS -extldflags -static -s" -o bin/csp-adapter
       

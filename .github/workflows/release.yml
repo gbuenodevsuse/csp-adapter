@@ -52,19 +52,21 @@ jobs:
       - name: Install Dependencies
         run: |
           go mod download
+          curl -sL https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz | tar xvzf - -C /usr/local/bin --strip-components=1
 
       - name: Build Binary
         run: |
-          VERSION=$(git describe --tags --always --dirty)
-          COMMIT=$(git rev-parse --short HEAD)
+          VERSION=$(git describe --tags --always)
           ARCH=$(go env GOHOSTARCH)
           SUFFIX="-${ARCH}"
 
           # Set linker flags
           LINKFLAGS="-X github.com/rancher/csp-adapter.Version=$VERSION"
-          LINKFLAGS="-X github.com/rancher/csp-adapter.GitCommit=$COMMIT"
 
           CGO_ENABLED=0 go build -ldflags "$LINKFLAGS -extldflags -static -s" -o bin/csp-adapter
+
+          mkdir -p dist/artifacts
+          cp bin/csp-adapter dist/artifacts/csp-adapter-linux${SUFFIX}
           
       - name: Run Tests
         run: |
@@ -72,12 +74,10 @@ jobs:
 
       - name: Package Helm Charts
         run: |
-          curl -sL https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz | tar xvzf - -C /usr/local/bin --strip-components=1
-
           VERSION=$(git describe --tags --always)
           HELM_VERSION=${VERSION/v/}
 
-          mkdir -p build/charts dist/artifacts
+          mkdir -p build/charts
           cp -r charts build/
 
           sed -i -e "s/^version:.*/version: $HELM_VERSION/" \
