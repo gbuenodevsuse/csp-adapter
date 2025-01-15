@@ -1,16 +1,12 @@
 TARGETS := $(shell ls scripts)
 
-.dapper:
-	@echo Downloading dapper
-	@curl -sL https://releases.rancher.com/dapper/latest/dapper-`uname -s`-`uname -m` > .dapper.tmp
-	@@chmod +x .dapper.tmp
-	@./.dapper.tmp -v
-	@mv .dapper.tmp .dapper
+# Default target
+all: clean ci
 
-$(TARGETS): .dapper
-	./.dapper $@
-
+# Cleanup rule
 clean:
-	rm -rf bin dist
+	rm -rf bin dist build
 
-.PHONY: $(TARGETS)
+# Rule to execute scripts
+$(TARGETS):
+	./scripts/$@
