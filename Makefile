@@ -1,14 +1,12 @@
 TARGETS := $(shell ls scripts)
 
+# Define target platforms, image builder, and the fully qualified image name.
 RUNNER := docker
 IMAGE_BUILDER := $(RUNNER) buildx
 MACHINE := rancher
 BUILDX_ARGS ?= --sbom=true --attest type=provenance,mode=max
 DEFAULT_PLATFORMS := linux/amd64
-
-# Define target platforms, image builder, and the fully qualified image name.
 TARGET_PLATFORMS ?= linux/amd64
-
 REPO ?= rancher
 IMAGE = $(REPO)/rancher-csp-adapter:$(TAG)
 
