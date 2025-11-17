@@ -34,7 +34,7 @@ jobs:
     needs: [create-release]
     steps:
       - name: Setup GO
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/actions/setup
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
