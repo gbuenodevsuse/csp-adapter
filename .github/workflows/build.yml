@@ -6,8 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup
-        uses: ./setup.yml
+      - name: Setup GO
+        uses: ./.github/actions/setup.yml
 
       - name: Run Build
         run: make build
